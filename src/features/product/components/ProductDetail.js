@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useParams } from "react-router-dom";
 import { fetchProductByIdAsync, selectProductById } from "../productSlice";
+import { selectLoggedInUser } from "../../auth/authSlice";
+import { addToCartAsync } from "../../cart/cartSlice";
 
 
 const colors = [
@@ -38,12 +40,19 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const product = useSelector(selectProductById);
+  const user=useSelector(selectLoggedInUser)
   const dispatch = useDispatch();
   const params = useParams();
+  //us particular product ke baare mai sab hai
   useEffect(() => {
     let id=params.id
     dispatch(fetchProductByIdAsync({id}));
   }, [dispatch, params.id]);
+
+  const hadndleCart=(e)=>{
+    e.preventDefault();
+   dispatch(addToCartAsync({...product,quantity:1,user:user.id}))
+  }
 
   return (
     <div className="bg-white">
@@ -285,6 +294,7 @@ export default function ProductDetail() {
               </div>
 
               <button
+              onClick={hadndleCart}
                 type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
