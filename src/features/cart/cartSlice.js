@@ -1,5 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addToCart, deleteItemFromCart, fetchItemsByUserId, upadteCart } from "./cartAPI";
+import {
+  addToCart,
+  deleteItemFromCart,
+  fetchItemsByUserId,
+  resetCart,
+  upadteCart,
+} from "./cartAPI";
 
 const initialState = {
   items: [],
@@ -33,6 +39,14 @@ export const upadteCartAsync = createAsyncThunk(
   }
 );
 
+export const resetCartAsync = createAsyncThunk(
+  "cart/resetCart",
+  async (update) => {
+    const response = await resetCart(update);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
 export const deleteItemFromCartAsync = createAsyncThunk(
   "cart/deleteItemFromCart",
   async (itemId) => {
@@ -41,7 +55,6 @@ export const deleteItemFromCartAsync = createAsyncThunk(
     return response.data;
   }
 );
-
 
 export const cartSlice = createSlice({
   name: "cart",
@@ -59,30 +72,41 @@ export const cartSlice = createSlice({
       .addCase(addToCartAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.items.push(action.payload);
-    
       })
       .addCase(fetchItemsByUserIdAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.items=action.payload;
-      }).addCase(upadteCartAsync.pending, (state) => {
+        state.items = action.payload;
+      })
+      .addCase(upadteCartAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(upadteCartAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        const findIndex=state.items.findIndex(item=>item.id===action.payload.id);
-        state.items[findIndex]=action.payload;
+        const findIndex = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        state.items[findIndex] = action.payload;
       })
       .addCase(deleteItemFromCartAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(deleteItemFromCartAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        const index=state.items.findIndex(item=>item.id===action.payload.id);
-        state.items.splice(index,1);
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        state.items.splice(index, 1);
       })
+      .addCase(resetCartAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(resetCartAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.items=[];
+      });
   },
 });
 
