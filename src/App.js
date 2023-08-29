@@ -14,6 +14,7 @@ import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
 import PageNotFound from "./pages/PageNotFound";
 import OrderSucessPage from "./pages/OrderSucessPage";
 import UserOrderPage from "./pages/UserOrderPage";
+import { UserProfilePage } from "./pages/UserProfilePage";
 
 
 const router = createBrowserRouter([
@@ -58,7 +59,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    //koi rooute match nhi kara to ye chalega
+    
     path: "/order-success/:id",
     element: (
    <OrderSucessPage></OrderSucessPage>
@@ -66,10 +67,17 @@ const router = createBrowserRouter([
   },
 
   {
-    //koi rooute match nhi kara to ye chalega
+  
     path: "/orders",
     element: (
    <UserOrderPage></UserOrderPage>
+    ),
+  },
+  {
+  
+    path: "/profile",
+    element: (
+   <UserProfilePage></UserProfilePage>
     ),
   },
   {
