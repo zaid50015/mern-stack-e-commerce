@@ -77,5 +77,6 @@ export const userSlice = createSlice({
 export const { increment } = userSlice.actions;
 
 export const selectUserOrders = (state) => state.user.userOrders;
+export const selectLoggedInUserInfo = (state) => state.user.userInfo;
 
 export default userSlice.reducer;

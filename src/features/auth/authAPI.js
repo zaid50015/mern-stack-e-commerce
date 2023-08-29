@@ -39,3 +39,9 @@ export function checkUser(loginInfo) {
 }
 
 
+export function logOut(userId) {
+  return new Promise(async (resolve,reject) => {
+    resolve({ message:"Successfully" });
+  });
+}
+
