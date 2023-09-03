@@ -12,6 +12,7 @@ const UserProfile = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset
   } = useForm();
 
   const [handleEditIndex, sethandleEditIndex] = useState(-1);
@@ -47,7 +48,7 @@ const UserProfile = () => {
   };
 
   const handleAdd = (address) => {
-    const newUser = { ...user, addresses: [...user.addresses, address] };
+    const newUser = { ...user, addresses: [...user.addresses, address] }; //shallow copy issue
     dispatch(updateUserAsync(newUser));
       setshowAddressFrom(false);
   };
@@ -74,6 +75,13 @@ const UserProfile = () => {
               <button
                 onClick={(e) => {
                   setshowAddressFrom(true);
+                  setValue("name", "");
+                  setValue("email", "");
+                  setValue("phone", "");
+                  setValue("street", "");
+                  setValue("city", "");
+                  setValue("region", "");
+                  setValue("postal", "");
                   sethandleEditIndex(-1);
                 }}
                 type="button"
@@ -89,6 +97,7 @@ const UserProfile = () => {
                   className="bg-white px-5 py-12 mt-12"
                   onSubmit={handleSubmit((data) => {
                     handleAdd(data);
+                    reset();
                   })}
                 >
                   <div className="space-y-12">
@@ -291,7 +300,7 @@ const UserProfile = () => {
                         type="submit"
                         className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                       >
-                        Edit Address
+                        Add Address
                       </button>
                     </div>
                   </div>

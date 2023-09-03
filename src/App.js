@@ -16,17 +16,14 @@ import OrderSucessPage from "./pages/OrderSucessPage";
 import UserOrderPage from "./pages/UserOrderPage";
 import { UserProfilePage } from "./pages/UserProfilePage";
 
-import {
-  fetchLoggedInUserAsync,
-
-} from "./features/user/userSlice";
+import { fetchLoggedInUserAsync } from "./features/user/userSlice";
 import { selectLoggedInUser } from "./features/auth/authSlice";
 import Logout from "./features/auth/components/Logout";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ProtectedAdmin from "./features/auth/components/ProtectedAdmin";
 import AdminHome from "./pages/AdminHome";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
-
+import ProductFormPageAdmin from "./pages/ProductFormPageAdmin";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,9 +36,25 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: (
-       <ProtectedAdmin>
+      <ProtectedAdmin>
         <AdminHome></AdminHome>
-       </ProtectedAdmin>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: "/admin/product-form",
+    element: (
+      <ProtectedAdmin>
+        <ProductFormPageAdmin></ProductFormPageAdmin>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: "/admin/product-form/:id",
+    element: (
+      <ProtectedAdmin>
+        <ProductFormPageAdmin></ProductFormPageAdmin>
+      </ProtectedAdmin>
     ),
   },
   {
@@ -80,9 +93,9 @@ const router = createBrowserRouter([
   {
     path: "/admin/product-detail/:id",
     element: (
-     <ProtectedAdmin>
-      <AdminProductDetailPage></AdminProductDetailPage>
-     </ProtectedAdmin>
+      <ProtectedAdmin>
+        <AdminProductDetailPage></AdminProductDetailPage>
+      </ProtectedAdmin>
     ),
   },
   {
@@ -100,11 +113,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/logout",
-    element:<Logout></Logout>,
+    element: <Logout></Logout>,
   },
   {
     path: "/forgot-password",
-    element:<ForgotPasswordPage></ForgotPasswordPage>,
+    element: <ForgotPasswordPage></ForgotPasswordPage>,
   },
   {
     //koi rooute match nhi kara to ye chalega
@@ -119,7 +132,7 @@ function App() {
   useEffect(() => {
     if (user) {
       dispatch(fetchItemsByUserIdAsync(user.id));
-      console.log(user)
+      console.log(user);
       dispatch(fetchLoggedInUserAsync(user.id));
     }
   }, [dispatch, user]);
