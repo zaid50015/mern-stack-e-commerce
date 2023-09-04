@@ -3,13 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Link, Navigate } from 'react-router-dom';
 import { deleteItemFromCartAsync, selectItem, upadteCartAsync } from './cartSlice';
+import { discountedPrice } from '../../app/constants';
 // TODO abhu bhi same id se nhi add ho rahe hai
 
 export default function Cart() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
  const items=useSelector(selectItem);
- const totalAmount=items.reduce((amount, item) => amount + item.price*item.quantity, 0);
+ const totalAmount=items.reduce((amount, item) => amount + discountedPrice(item)*item.quantity, 0);
  const totalItems=items.reduce((total, item) => total +item.quantity, 0);
  const handleQuantity=(e,item)=>{
   dispatch(upadteCartAsync({...item,quantity:+e.target.value}))
@@ -44,7 +45,7 @@ export default function Cart() {
                           <h3>
                             <Link to={`/product-detail/${item.id}`}>{item.title}</Link>
                           </h3>
-                          <p className="ml-4">${item.price}</p>
+                          <p className="ml-4">${discountedPrice(item)}</p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
                           {item.brand}

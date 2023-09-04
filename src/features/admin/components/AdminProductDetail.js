@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { fetchProductByIdAsync, selectProductById } from "../../product/productSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
 import { addToCartAsync } from "../../cart/cartSlice";
+import { discountedPrice } from "../../../app/constants";
 
 const colors = [
   { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
@@ -144,8 +145,11 @@ export default function AdminProductDetail() {
             {/* Options */}
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">
+              <p className="text-3xl tracking-tight text-gray-900 line-through">
                 ${product.price}
+              </p>
+              <p className="text-3xl tracking-tight text-gray-900">
+                ${discountedPrice(product)}
               </p>
 
               {/* Reviews */}
