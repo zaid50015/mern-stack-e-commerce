@@ -35,7 +35,8 @@
         "https://i.dummyjson.com/data/products/2/2.jpg",
         "https://i.dummyjson.com/data/products/2/3.jpg",
         "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
-      ]
+      ],
+      "deleted": true
     },
     {
       "id": 3,
@@ -2568,7 +2569,7 @@
         "region": "UTTAR PRADESH",
         "postal": "226020"
       },
-      "status": "shipped",
+      "status": "cancelled",
       "id": 1
     },
     {
