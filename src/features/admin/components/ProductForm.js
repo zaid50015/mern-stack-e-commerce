@@ -10,11 +10,11 @@ import {
 } from '../../product/productSlice';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Modal from '../../common/Modal';
 
-
-const ProductForm = () => {
-const {
+function ProductForm() {
+  const {
     register,
     handleSubmit,
     setValue,
@@ -26,19 +26,19 @@ const {
   const dispatch = useDispatch();
   const params = useParams();
   const selectedProduct = useSelector(selectProductById);
+  const [openModal, setOpenModal] = useState(null);
 
   useEffect(() => {
-    console.log(params.id);
     if (params.id) {
-      let id=params.id
+      console.log("called");
+      let id =params.id
       dispatch(fetchProductByIdAsync({id}));
     } else {
       dispatch(clearSelectedProduct());
     }
-  }, [params.id, dispatch]);
+  }, [params.id]);
 
   useEffect(() => {
-
     if (selectedProduct && params.id) {
       setValue('title', selectedProduct.title);
       setValue('description', selectedProduct.description);
@@ -54,18 +54,18 @@ const {
     }
   }, [selectedProduct, params.id, setValue]);
 
-
-  const handleDelete = () =>{
-    const product = {...selectedProduct};
+  const handleDelete = () => {
+    const product = { ...selectedProduct };
     product.deleted = true;
     dispatch(updateProductAsync(product));
-  }
+  };
 
   return (
+    <>
     <form
       noValidate
       onSubmit={handleSubmit((data) => {
-
+        console.log(data);
         const product = { ...data };
         product.images = [
           product.image1,
@@ -101,6 +101,8 @@ const {
           </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          {selectedProduct.deleted && <h2 className="text-red-500 sm:col-span-6">This product is deleted</h2>}
+
             <div className="sm:col-span-6">
               <label
                 htmlFor="title"
@@ -420,6 +422,7 @@ const {
           </div>
         </div>
       </div>
+    
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
         <button
@@ -429,12 +432,14 @@ const {
           Cancel
         </button>
 
-       {selectedProduct && <button
-          onClick={handleDelete}
-          className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Delete
-        </button>}
+        {selectedProduct && !selectedProduct.deleted && (
+          <button
+            onClick={(e)=>{e.preventDefault();setOpenModal(true)}}
+            className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Delete
+          </button>
+        )}
 
         <button
           type="submit"
@@ -444,7 +449,17 @@ const {
         </button>
       </div>
     </form>
+    <Modal
+        title={`Delete ${selectedProduct.title}`}
+        message="Are you sure you want to delete this Product ?"
+        dangerOption="Delete"
+        cancelOption="Cancel"
+        dangerAction={handleDelete}
+        cancelAction={() => setOpenModal(null)}
+        showModal={openModal}
+      ></Modal>
+    </>
   );
 }
 
-export default ProductForm
+export default ProductForm;

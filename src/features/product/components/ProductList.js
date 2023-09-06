@@ -1,5 +1,5 @@
-import React, { useState, Fragment, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, Fragment, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   fetchBrandsAsync,
   fetchCategoriesAsync,
@@ -7,33 +7,32 @@ import {
   selectAllProducts,
   selectBrands,
   selectCategories,
+  selectProductListStatus,
   selectTotalItems,
-} from '../productSlice';
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import {
-
-  StarIcon,
-} from '@heroicons/react/20/solid';
-import { Link } from 'react-router-dom';
+} from "../productSlice";
+import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { StarIcon } from "@heroicons/react/20/solid";
+import { Link } from "react-router-dom";
 import {
   ChevronDownIcon,
   FunnelIcon,
   MinusIcon,
   PlusIcon,
   Squares2X2Icon,
-} from '@heroicons/react/20/solid';
-import { ITEMS_PER_PAGE, discountedPrice } from '../../../app/constants';
-import Pagination from '../../common/Pagination';
+} from "@heroicons/react/20/solid";
+import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
+import Pagination from "../../common/Pagination";
+import { TailSpin } from "react-loader-spinner";
 
 const sortOptions = [
-  { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
-  { name: 'Price: Low to High', sort: 'price', order: 'asc', current: false },
-  { name: 'Price: High to Low', sort: 'price', order: 'desc', current: false },
+  { name: "Best Rating", sort: "rating", order: "desc", current: false },
+  { name: "Price: Low to High", sort: "price", order: "asc", current: false },
+  { name: "Price: High to Low", sort: "price", order: "desc", current: false },
 ];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function ProductList() {
@@ -42,15 +41,16 @@ export default function ProductList() {
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const totalItems = useSelector(selectTotalItems);
+  const status = useSelector(selectProductListStatus);
   const filters = [
     {
-      id: 'category',
-      name: 'Category',
+      id: "category",
+      name: "Category",
       options: categories,
     },
     {
-      id: 'brand',
-      name: 'Brands',
+      id: "brand",
+      name: "Brands",
       options: brands,
     },
   ];
@@ -91,7 +91,6 @@ export default function ProductList() {
   };
 
   const handlePage = (page) => {
-
     setPage(page);
   };
 
@@ -155,10 +154,10 @@ export default function ProductList() {
                               onClick={(e) => handleSort(e, option)}
                               className={classNames(
                                 option.current
-                                  ? 'font-medium text-gray-900'
-                                  : 'text-gray-500',
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm'
+                                  ? "font-medium text-gray-900"
+                                  : "text-gray-500",
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm"
                               )}
                             >
                               {option.name}
@@ -201,7 +200,7 @@ export default function ProductList() {
               ></DesktopFilter>
               {/* Product grid */}
               <div className="lg:col-span-3">
-                <ProductGrid products={products}></ProductGrid>
+                <ProductGrid products={products} status={status}></ProductGrid>
               </div>
               {/* Product grid end */}
             </div>
@@ -395,12 +394,24 @@ function DesktopFilter({ handleFilter, filters }) {
   );
 }
 
-
-function ProductGrid({ products }) {
+function ProductGrid({ products, status }) {
   return (
     <div className="bg-white">
+
       <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+        {status === "loading" ? (
+        <TailSpin
+          height="90"
+          width="90"
+          color="#4f46e5"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{marginLeft: '200px' }}
+          visible={true}
+         
+        />
+      ) : null}
           {products.map((product) => (
             <Link to={`/product-detail/${product.id}`} key={product.id}>
               <div className="group relative border-solid border-2 p-2 border-gray-200">
@@ -426,18 +437,20 @@ function ProductGrid({ products }) {
                   </div>
                   <div>
                     <p className="text-sm block font-medium text-gray-900">
-                      $
-                      {discountedPrice(product)}
+                      ${discountedPrice(product)}
                     </p>
                     <p className="text-sm block line-through font-medium text-gray-400">
                       ${product.price}
                     </p>
                   </div>
                 </div>
-                {product.stock<=0?
+                {product.stock <= 0 ? (
                   <div className="mt-2">
-                  <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Product Out of Stock</span>
-                  </div>:null}
+                    <span className="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">
+                      Product Out of Stock
+                    </span>
+                  </div>
+                ) : null}
               </div>
             </Link>
           ))}

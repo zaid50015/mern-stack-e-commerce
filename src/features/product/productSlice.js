@@ -57,8 +57,9 @@ export const fetchCategoriesAsync = createAsyncThunk(
 export const fetchProductByIdAsync = createAsyncThunk(
   "product/fetchProductById",
   async ({ id }) => {
+    console.log("called")
     const response = await fetchProductById(id);
-    console.log(response);
+    console.log(response.data);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -142,6 +143,7 @@ export const productSlice = createSlice({
           (product) => product.id === action.payload.id
         );
         state.products[index] = action.payload;
+        state.selectProduct = action.payload;
       });
   },
 });
@@ -152,5 +154,6 @@ export const selectBrands = (state) => state.product.brands;
 export const selectCategories = (state) => state.product.categories;
 export const selectProductById = (state) => state.product.selectProduct;
 export const selectTotalItems = (state) => state.product.totalItems;
+export const selectProductListStatus = (state) => state.product.status;
 
 export default productSlice.reducer;

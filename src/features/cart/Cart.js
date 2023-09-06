@@ -1,26 +1,36 @@
-import React, { useState, Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, Fragment } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import { Link, Navigate } from 'react-router-dom';
-import { deleteItemFromCartAsync, selectItem, upadteCartAsync } from './cartSlice';
-import { discountedPrice } from '../../app/constants';
+import { Link, Navigate } from "react-router-dom";
+import {
+  deleteItemFromCartAsync,
+  selectCartStatus,
+  selectItem,
+  upadteCartAsync,
+} from "./cartSlice";
+import { discountedPrice } from "../../app/constants";
+import { TailSpin } from "react-loader-spinner";
 // TODO abhu bhi same id se nhi add ho rahe hai
 
 export default function Cart() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
- const items=useSelector(selectItem);
- const totalAmount=items.reduce((amount, item) => amount + discountedPrice(item)*item.quantity, 0);
- const totalItems=items.reduce((total, item) => total +item.quantity, 0);
- const handleQuantity=(e,item)=>{
-  dispatch(upadteCartAsync({...item,quantity:+e.target.value}))
- }
- const removeItem=(e,itemId)=>{
-  dispatch(deleteItemFromCartAsync(itemId));
- }
+  const items = useSelector(selectItem);
+  const totalAmount = items.reduce(
+    (amount, item) => amount + discountedPrice(item) * item.quantity,
+    0
+  );
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
+  const handleQuantity = (e, item) => {
+    dispatch(upadteCartAsync({ ...item, quantity: +e.target.value }));
+  };
+  const status = useSelector(selectCartStatus);
+  const removeItem = (e, itemId) => {
+    dispatch(deleteItemFromCartAsync(itemId));
+  };
   return (
     <>
-       {!items.length && <Navigate to="/" replace={true}></Navigate>}
+      {!items.length && <Navigate to="/" replace={true}></Navigate>}
       <div>
         <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
@@ -28,6 +38,17 @@ export default function Cart() {
               Cart
             </h1>
             <div className="flow-root">
+              {status === "loading" ? (
+                <TailSpin
+                  height="90"
+                  width="90"
+                  color="#4f46e5"
+                  ariaLabel="tail-spin-loading"
+                  radius="1"
+                  wrapperStyle={{ marginLeft: "200px" }}
+                  visible={true}
+                />
+              ) : null}
               <ul role="list" className="-my-6 divide-y divide-gray-200">
                 {items.map((item) => (
                   <li key={item.id} className="flex py-6">
@@ -43,7 +64,9 @@ export default function Cart() {
                       <div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <h3>
-                            <Link to={`/product-detail/${item.id}`}>{item.title}</Link>
+                            <Link to={`/product-detail/${item.id}`}>
+                              {item.title}
+                            </Link>
                           </h3>
                           <p className="ml-4">${discountedPrice(item)}</p>
                         </div>
@@ -59,7 +82,10 @@ export default function Cart() {
                           >
                             Qty
                           </label>
-                          <select onChange={e=>handleQuantity(e,item)} value={item.quantity}>
+                          <select
+                            onChange={(e) => handleQuantity(e, item)}
+                            value={item.quantity}
+                          >
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -73,7 +99,7 @@ export default function Cart() {
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={e=>removeItem(e,item.id)}
+                            onClick={(e) => removeItem(e, item.id)}
                           >
                             Remove
                           </button>
@@ -99,7 +125,8 @@ export default function Cart() {
               Shipping and taxes calculated at checkout.
             </p>
             <div className="mt-6">
-              <Link to="/checkout"
+              <Link
+                to="/checkout"
                 href="#"
                 className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
               >
@@ -110,14 +137,14 @@ export default function Cart() {
               <p>
                 or
                 <Link to="/">
-                <button
-                  type="button"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                  onClick={() => setOpen(false)}
-                >
-                  Continue Shopping
-                  <span aria-hidden="true"> &rarr;</span>
-                </button>
+                  <button
+                    type="button"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                    onClick={() => setOpen(false)}
+                  >
+                    Continue Shopping
+                    <span aria-hidden="true"> &rarr;</span>
+                  </button>
                 </Link>
               </p>
             </div>
