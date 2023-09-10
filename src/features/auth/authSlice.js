@@ -18,16 +18,15 @@ export const createUserAsync = createAsyncThunk(
 
 export const checkUserAsync = createAsyncThunk(
   "auth/checkUser",
-  async (loginInfo,{rejectWithValue}) => {
+  async (loginInfo, { rejectWithValue }) => {
     try {
       const response = await checkUser(loginInfo);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+      // The value we return becomes the `fulfilled` action payload
+      return response.data;
     } catch (error) {
       console.log(error);
-     return  rejectWithValue(error)
+      return rejectWithValue(error);
     }
-    
   }
 );
 
