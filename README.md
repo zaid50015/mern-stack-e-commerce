@@ -1,3 +1,10 @@
+# Challenges faced while doing the Project
+1) While using async thunk I realised that while calling the function using dispatch hook we cannot pass two argumnet in  the function instead it we can only pass an single argument to solve this i started passing them as object
+2) Redirecting to login page if user was not login for example if I directly tried to accessing the user cartPage without loggin in by changing the url directly in searchBar the user should be redirected at login page I soolved this by creating  a protectedRoute page which checks wether the user is logged in or not
+3) CRUD opeartion on cart where changing the json database but where not shown in the front end to solve this I first change the data in the databse and send that data to reducers function and then I changed that in selectors also
+4) Applying filter property on products was another challenge to after reading the json-server application I came to Know about query string which can be passed on to url as query param  for filtrartion however I am still unable to figureOut how to apply multiple filter
+
+
 # Getting Started with Create React App and Redux
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
