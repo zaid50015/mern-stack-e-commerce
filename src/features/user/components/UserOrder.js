@@ -7,18 +7,19 @@ import { discountedPrice } from "../../../app/constants";
 
 const UserOrder = () => {
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUserInfo);
-  console.log(user);
+  const userInfo = useSelector(selectLoggedInUserInfo);
+  console.log(userInfo);
   const orders = useSelector(selectUserOrders);
   console.log(orders)
+
   useEffect(() => {
-    dispatch(fetchLoggedInUserOrderAsync(user.id));
+    dispatch(fetchLoggedInUserOrderAsync(userInfo.id));
   }, [dispatch]);
 
   return (
     <>
       {orders.map((order) => (
-        <div>
+        <div key={order.id}> 
           <div>
             <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
@@ -31,11 +32,11 @@ const UserOrder = () => {
                 <div className="flow-root">
                   <ul role="list" className="-my-6 divide-y divide-gray-200">
                     {order.items.map((item) => (
-                      <li key={item.id} className="flex py-6">
+                      <li key={item.product.id} className="flex py-6">
                         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                           <img
-                            src={item.thumbnail}
-                            alt={item.title}
+                            src={item.product.thumbnail}
+                            alt={item.product.title}
                             className="h-full w-full object-cover object-center"
                           />
                         </div>
@@ -44,9 +45,9 @@ const UserOrder = () => {
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>
-                                <a href={item.href}>{item.title}</a>
+                                <a href={item.product.id}>{item.product.title}</a>
                               </h3>
-                              <p className="ml-4">${discountedPrice(item)}</p>
+                              <p className="ml-4">${discountedPrice(item.product)*item.quantity}</p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
                               {item.brand}
@@ -93,7 +94,7 @@ const UserOrder = () => {
                         {order.selectedAddress.street}
                       </p>
                       <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                        {order.selectedAddress.pinCode}
+                        {order.selectedAddress.postal}
                       </p>
                     </div>
                   </div>

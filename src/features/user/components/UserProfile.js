@@ -18,24 +18,24 @@ const UserProfile = () => {
   const [handleEditIndex, sethandleEditIndex] = useState(-1);
   const [showAddressFrom, setshowAddressFrom] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUserInfo);
+  const userInfo = useSelector(selectLoggedInUserInfo);
 
   //Some methods
   const handleRemove = (e, index) => {
-    const newUser = { ...user, addresses: [...user.addresses] }; //shallow copy issue
+    const newUser = { ...userInfo, addresses: [...userInfo.addresses] }; //shallow copy issue
     newUser.addresses.splice(index, 1);
     dispatch(updateUserAsync(newUser));
   };
 
   const handleEdit = (addressUpdate, index) => {
-    const newUser = { ...user, addresses: [...user.addresses] }; //shallow copy issue
+    const newUser = { ...userInfo, addresses: [...userInfo.addresses] }; //shallow copy issue
     newUser.addresses.splice(index, 1, addressUpdate);
     dispatch(updateUserAsync(newUser));
     sethandleEditIndex(-1);
   };
   const handleEditForm = (index) => {
     sethandleEditIndex(index);
-    const address = user.addresses[index];
+    const address = userInfo.addresses[index];
     setValue("name", address.name);
     setValue("email", address.email);
     setValue("phone", address.phone);
@@ -48,7 +48,7 @@ const UserProfile = () => {
   };
 
   const handleAdd = (address) => {
-    const newUser = { ...user, addresses: [...user.addresses, address] }; //shallow copy issue
+    const newUser = { ...userInfo, addresses: [...userInfo.addresses, address] }; //shallow copy issue
     dispatch(updateUserAsync(newUser));
       setshowAddressFrom(false);
   };
@@ -60,14 +60,14 @@ const UserProfile = () => {
           <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
               <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
-                Name: {user.name ? user.name : "Guest User"}
+                Name: {userInfo.name ? userInfo.name : "Guest User"}
               </h1>
               <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
-                Email: {user.email}
+                Email: {userInfo.email}
               </h3>
 
-              {user.role==='admin'&& <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
-                Role: {user.role}
+              {userInfo.role==='admin'&& <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
+                Role: {userInfo.role}
               </h3>}
             </div>
 
@@ -308,7 +308,7 @@ const UserProfile = () => {
               ) : null}
 
               <p className="mt-0.5 text-sm text-gray-500">Your Addresses :</p>
-              {user.addresses.map((address, index) => (
+              {userInfo.addresses.map((address, index) => (
                 <div>
                   {handleEditIndex === index ? (
                     <form

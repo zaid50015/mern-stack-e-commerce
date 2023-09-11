@@ -22,20 +22,12 @@ export const checkUserAsync = createAsyncThunk(
     try {
       const response = await checkUser(loginInfo);
       // The value we return becomes the `fulfilled` action payload
+
       return response.data;
     } catch (error) {
       console.log(error);
       return rejectWithValue(error);
     }
-  }
-);
-
-export const updateUserAsync = createAsyncThunk(
-  "auth/updateUser",
-  async (userData) => {
-    const response = await updateUser(userData);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
   }
 );
 
@@ -73,13 +65,7 @@ export const authSlice = createSlice({
         state.status = "rejected";
         state.error = action.payload;
       })
-      .addCase(updateUserAsync.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.loggedInUser = action.payload;
-      })
-      .addCase(updateUserAsync.rejected, (state, action) => {
-        state.status = "rejected";
-      })
+
       .addCase(logOutAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.loggedInUser = null;

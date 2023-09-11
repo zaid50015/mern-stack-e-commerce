@@ -29,7 +29,7 @@ const ProductForm = () => {
   const selectedProduct = useSelector(selectProductById);
   const [openModal, setOpenModal] = useState(null);
   useEffect(() => {
-    console.log(params.id);
+ 
     if (params.id) {
       let id = params.id;
       dispatch(fetchProductByIdAsync({ id }));
@@ -175,7 +175,7 @@ const ProductForm = () => {
                   >
                     <option value="">--choose brand--</option>
                     {brands.map((brand) => (
-                      <option value={brand.value}>{brand.label}</option>
+                      <option key={brand.id} value={brand.value}>{brand.label}</option>
                     ))}
                   </select>
                 </div>
@@ -196,7 +196,7 @@ const ProductForm = () => {
                   >
                     <option value="">--choose category--</option>
                     {categories.map((category) => (
-                      <option value={category.value}>{category.label}</option>
+                      <option key={category.id} value={category.value}>{category.label}</option>
                     ))}
                   </select>
                 </div>
@@ -465,15 +465,16 @@ const ProductForm = () => {
           </button>
         </div>
       </form>
+      {selectedProduct &&
       <Modal
-        title={`Delete ${selectedProduct}`}
+        title={`Delete ${selectedProduct.title}`}
         message="Are you sure you want to delete this Product ?"
         dangerOption="Delete"
         cancelOption="Cancel"
         dangerAction={handleDelete}
         cancelAction={() => setOpenModal(null)}
         showModal={openModal}
-      ></Modal>
+      ></Modal>}
       <ToastContainer />
     </>
   );

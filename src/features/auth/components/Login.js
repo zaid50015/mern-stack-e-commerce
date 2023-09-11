@@ -34,7 +34,7 @@ const user=useSelector(selectLoggedInUser);
               dispatch(
                 checkUserAsync({ email: data.email, password: data.password })
               );
-              console.log(data);
+             
             })}
             className="space-y-6"
           >

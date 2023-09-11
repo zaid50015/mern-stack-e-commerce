@@ -6,15 +6,14 @@ import {
 } from "./userAPI";
 
 const initialState = {
-  userOrders: [],
   status: "idle",
   userInfo: null, //this will be used for detailed userInfo  while auth will only be used for logged in user id
 };
 
 export const fetchLoggedInUserOrderAsync = createAsyncThunk(
   "user/fetchLoggedInUserOrder",
-  async (amount) => {
-    const response = await fetchLoggedInUserOrder(amount);
+  async (id) => {
+    const response = await fetchLoggedInUserOrder(id);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -31,8 +30,8 @@ export const fetchLoggedInUserAsync = createAsyncThunk(
 
 export const updateUserAsync = createAsyncThunk(
   "user/updateUser",
-  async (id) => {
-    const response = await updateUser(id);
+  async (update) => {
+    const response = await updateUser(update);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -55,7 +54,7 @@ export const userSlice = createSlice({
       })
       .addCase(fetchLoggedInUserOrderAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.userOrders = action.payload;
+        state.userInfo.orders = action.payload;
       })
       .addCase(fetchLoggedInUserAsync.pending, (state) => {
         state.status = "loading";
@@ -69,14 +68,14 @@ export const userSlice = createSlice({
       })
       .addCase(updateUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
-           state.userOrders = action.payload;
+           state.userInfo = action.payload;
       });
   },
 });
 
 export const { increment } = userSlice.actions;
 
-export const selectUserOrders = (state) => state.user.userOrders;
+export const selectUserOrders = (state) => state.user.userInfo.orders;
 export const selectLoggedInUserInfo = (state) => state.user.userInfo;
 
 export default userSlice.reducer;

@@ -2,7 +2,7 @@ import { Link, Navigate } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserAsync } from "../features/auth/authSlice";
+
 
 import { useState } from "react";
 import {
@@ -14,9 +14,10 @@ import {
   createOrderAsync,
   selectCurrentOrder,
 } from "../features/order/orderSlice";
-import { selectLoggedInUserInfo } from "../features/user/userSlice";
+import { selectLoggedInUserInfo, updateUserAsync } from "../features/user/userSlice";
 import { discountedPrice } from "../app/constants";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Checkout() {
   const {
     register,
@@ -59,15 +60,50 @@ function Checkout() {
         items,
         totalAmount,
         totalItems,
-        user,
+        user:user.id,
         paymentMethod,
         selectedAddress,
-        status: "pending", // This can only be updated by admin
+            // This can only be updated by admin
       };
 
       dispatch(createOrderAsync(order));
     } else {
-      alert("Enter Address and Payment Method ");
+       if(!selectedAddress){
+        toast.error('Please Select Address', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+       }
+       else if(!paymentMethod){
+        toast.error('Please Select Payment method', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+       }
+       else{
+        toast.error('Please Select Address and Payment Method', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+       }
       //TODO adding proper alert
     }
 
@@ -501,6 +537,7 @@ function Checkout() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

@@ -12,8 +12,7 @@ import { selectLoggedInUser } from "../auth/authSlice";
 
 const navigation = [
   { name: "Products", link: "/", user: true },
-
-  { name: "Products", link: "/admin", admin: true },
+  { name: "Admin", link: "/admin", admin: true },
   { name: "Orders", link: "/admin/orders", admin: true },
 ];
 const userNavigation = [
@@ -29,6 +28,7 @@ function classNames(...classes) {
 const Navbar = ({ children }) => {
   const items = useSelector(selectItem);
   const user = useSelector(selectLoggedInUser);
+  console.log(user.role)
   return (
     <>
       <div className="min-h-full">
@@ -155,23 +155,23 @@ const Navbar = ({ children }) => {
 
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                  {navigation.map((item) => (
-                    <Link to={item.link}>
-                      <Disclosure.Button
-                        key={item.name}
-                        as="a"
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "block rounded-md px-3 py-2 text-base font-medium"
+                {navigation.map((item) =>
+                          item[user.role] ? (
+                            <Link
+                              key={item.name}
+                              to={item.link}
+                              className={classNames(
+                                item.current
+                                  ? "bg-gray-900 text-white"
+                                  : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                                "rounded-md px-3 py-2 text-sm font-medium"
+                              )}
+                              aria-current={item.current ? "page" : undefined}
+                            >
+                              {item.name}
+                            </Link>
+                          ) : null
                         )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </Disclosure.Button>
-                    </Link>
-                  ))}
                 </div>
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
