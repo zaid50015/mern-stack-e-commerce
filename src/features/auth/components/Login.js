@@ -95,7 +95,7 @@ const user=useSelector(selectLoggedInUser);
                 )}
               </div>
               {err && (
-                  <p className="text-red-500">{err.message}</p>
+                  <p className="text-red-500">{err ||err.message}</p>
                 )}
             </div>
                

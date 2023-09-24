@@ -140,9 +140,9 @@ function App() {
   const user = useSelector(selectLoggedInUser);
   useEffect(() => {
     if (user) {
-      dispatch(fetchItemsByUserIdAsync(user.id));
-      console.log(user);
-      dispatch(fetchLoggedInUserAsync(user.id));
+      dispatch(fetchItemsByUserIdAsync());
+      // we can get user id from req.user
+      dispatch(fetchLoggedInUserAsync());
     }
   }, [dispatch, user]);
 

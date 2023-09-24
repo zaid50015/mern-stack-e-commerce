@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useParams } from "react-router-dom";
 import { fetchProductByIdAsync, selectProductById, selectProductListStatus } from "../productSlice";
-import { selectLoggedInUser } from "../../auth/authSlice";
+
 import { addToCartAsync, selectItem } from "../../cart/cartSlice";
 import { discountedPrice } from "../../../app/constants";
 import "react-toastify/dist/ReactToastify.css";
@@ -44,7 +44,6 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const product = useSelector(selectProductById);
   const items = useSelector(selectItem);
-  const user = useSelector(selectLoggedInUser);
   const dispatch = useDispatch();
   const params = useParams();
 const status=useSelector(selectProductListStatus)
@@ -61,7 +60,7 @@ const status=useSelector(selectProductListStatus)
         ...product,
         product: product.id,
         quantity: 1,
-        user: user.id,
+    
       };
       dispatch(addToCartAsync(newItem));
       //TODO it will be based on the server respons of backend

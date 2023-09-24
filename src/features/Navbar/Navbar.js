@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 import { selectItem } from "../cart/cartSlice";
-import { selectLoggedInUser } from "../auth/authSlice";
+import { selectLoggedInUserInfo } from "../user/userSlice";
 
 const navigation = [
   { name: "Products", link: "/", user: true },
@@ -27,11 +27,13 @@ function classNames(...classes) {
 
 const Navbar = ({ children }) => {
   const items = useSelector(selectItem);
-  const user = useSelector(selectLoggedInUser);
-  console.log(user.role)
+  console.log(items)
+  const userInfo = useSelector(selectLoggedInUserInfo);
+  console.log(userInfo);
+  console.log("hello3");
   return (
     <>
-      <div className="min-h-full">
+      {userInfo && <div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
@@ -50,7 +52,7 @@ const Navbar = ({ children }) => {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) =>
-                          item[user.role] ? (
+                          item[userInfo.role] ? (
                             <Link
                               key={item.name}
                               to={item.link}
@@ -97,7 +99,7 @@ const Navbar = ({ children }) => {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
+                              src={userInfo.imageUrl}
                               alt=""
                             />
                           </Menu.Button>
@@ -156,7 +158,7 @@ const Navbar = ({ children }) => {
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                 {navigation.map((item) =>
-                          item[user.role] ? (
+                          item[userInfo.role] ? (
                             <Link
                               key={item.name}
                               to={item.link}
@@ -178,16 +180,16 @@ const Navbar = ({ children }) => {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
+                        src={userInfo.imageUrl}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
-                        {user.name}
+                        {userInfo.name}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
-                        {user.email}
+                        {userInfo.email}
                       </div>
                     </div>
                     <Link to="/cart">
@@ -239,7 +241,7 @@ const Navbar = ({ children }) => {
             {children}
           </div>
         </main>
-      </div>
+      </div>}
     </>
   );
 };
