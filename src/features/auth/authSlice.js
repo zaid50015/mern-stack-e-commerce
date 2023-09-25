@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { checkUser, createUser, logOut } from "./authAPI";
-import { updateUser } from "../user/userAPI";
+import { checkAuth, createUser, logOut, loginUser } from "./authAPI";
+
 const initialState = {
   status: "idle",
   loggedInUser: null,
   error: null,
+  userChecked:false
 };
 
 export const createUserAsync = createAsyncThunk(
@@ -16,17 +17,31 @@ export const createUserAsync = createAsyncThunk(
   }
 );
 
-export const checkUserAsync = createAsyncThunk(
-  "auth/checkUser",
+export const loginUserAsync = createAsyncThunk(
+  "auth/loginUser",
   async (loginInfo, { rejectWithValue }) => {
     try {
-      const response = await checkUser(loginInfo);
+      const response = await loginUser(loginInfo);
       // The value we return becomes the `fulfilled` action payload
 
       return response.data;
     } catch (error) {
       console.log(error);
       return rejectWithValue(error);
+    }
+  }
+);
+
+export const checkAuthAsync = createAsyncThunk(
+  "auth/checkAuth",
+  async () => {
+    try {
+      const response = await checkAuth();
+      // The value we return becomes the `fulfilled` action payload
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
     }
   }
 );
@@ -54,14 +69,14 @@ export const authSlice = createSlice({
         state.status = "idle";
         state.loggedInUser = action.payload;
       })
-      .addCase(checkUserAsync.pending, (state) => {
+      .addCase(loginUserAsync.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(checkUserAsync.fulfilled, (state, action) => {
+      .addCase(loginUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.loggedInUser = action.payload;
       })
-      .addCase(checkUserAsync.rejected, (state, action) => {
+      .addCase(loginUserAsync.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload;
       })
@@ -72,11 +87,27 @@ export const authSlice = createSlice({
       })
       .addCase(logOutAsync.rejected, (state, action) => {
         state.status = "rejected";
+      })
+      .addCase(checkAuthAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(checkAuthAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.loggedInUser = action.payload;
+        state.userChecked = true;
+      })
+      .addCase(checkAuthAsync.rejected, (state, action) => {
+        state.status = "rejected";
+        //jab tak user nhi aa jata
+        state.userChecked = true;
       });
   },
 });
 
+
+
 export const { increment } = authSlice.actions;
 export const selectLoggedInUser = (state) => state.auth.loggedInUser;
 export const selectError = (state) => state.auth.error;
+export const selectUserChecked = (state) => state.auth.userChecked;
 export default authSlice.reducer;

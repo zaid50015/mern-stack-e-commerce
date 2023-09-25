@@ -309,7 +309,7 @@ const UserProfile = () => {
 
               <p className="mt-0.5 text-sm text-gray-500">Your Addresses :</p>
               {userInfo.addresses.map((address, index) => (
-                <div>
+                <div key={index}>
                   {handleEditIndex === index ? (
                     <form
                       noValidate

@@ -14,7 +14,7 @@ export function createUser(userData) {
   });
 }
 
-export function checkUser(loginInfo) {
+export function loginUser(loginInfo) {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await fetch("http://localhost:8080/auth/login", {
@@ -25,6 +25,25 @@ export function checkUser(loginInfo) {
         },
         // 'Content-Type': 'application/x-www-form-urlencoded',
       });
+     
+      if (response.ok) {
+        const data = await response.json();
+
+        resolve({ data });
+      } else {
+        const err = await response.text();
+        reject( err );
+      }
+    } catch (error) {
+      reject( error );
+    }
+  });
+}
+
+export function checkAuth() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await fetch("http://localhost:8080/auth/checkAuth")
      
       if (response.ok) {
         const data = await response.json();

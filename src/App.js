@@ -17,7 +17,7 @@ import UserOrderPage from "./pages/UserOrderPage";
 import { UserProfilePage } from "./pages/UserProfilePage";
 
 import { fetchLoggedInUserAsync } from "./features/user/userSlice";
-import { selectLoggedInUser } from "./features/auth/authSlice";
+import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from "./features/auth/authSlice";
 import Logout from "./features/auth/components/Logout";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ProtectedAdmin from "./features/auth/components/ProtectedAdmin";
@@ -138,17 +138,25 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
+ const userChecked=useSelector(selectUserChecked)
+  useEffect(() => {
+    dispatch(checkAuthAsync());
+  }, []);
+
   useEffect(() => {
     if (user) {
+      dispatch(fetchLoggedInUserAsync());
       dispatch(fetchItemsByUserIdAsync());
       // we can get user id from req.user
-      dispatch(fetchLoggedInUserAsync());
+   
     }
   }, [dispatch, user]);
 
   return (
     <div className="App">
+      { userChecked &&
       <RouterProvider router={router} />
+    }
     </div>
   );
 }
