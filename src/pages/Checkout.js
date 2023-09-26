@@ -36,6 +36,8 @@ function Checkout() {
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
   const currentOrder = useSelector(selectCurrentOrder);
+  console.log(currentOrder);
+
   //Some methods
 
   const handleAddress = (e) => {
@@ -65,7 +67,7 @@ function Checkout() {
         selectedAddress,
             // This can only be updated by admin
       };
-
+          //TODO : We will upadte the cart after the payment is sucessfull
       dispatch(createOrderAsync(order));
     } else {
        if(!selectedAddress){
@@ -117,9 +119,15 @@ function Checkout() {
   return (
     <>
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
-      {currentOrder && (
+      {currentOrder && currentOrder.paymentMethod==='cash' &&  (
         <Navigate
           to={`/order-success/${currentOrder.id}`}
+          replace={true}
+        ></Navigate>
+      )}
+            {currentOrder && currentOrder.paymentMethod==='card' &&  (
+        <Navigate
+          to={`/stripe-checkout`}
           replace={true}
         ></Navigate>
       )}
