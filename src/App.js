@@ -17,7 +17,11 @@ import UserOrderPage from "./pages/UserOrderPage";
 import { UserProfilePage } from "./pages/UserProfilePage";
 
 import { fetchLoggedInUserAsync } from "./features/user/userSlice";
-import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from "./features/auth/authSlice";
+import {
+  checkAuthAsync,
+  selectLoggedInUser,
+  selectUserChecked,
+} from "./features/auth/authSlice";
 import Logout from "./features/auth/components/Logout";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ProtectedAdmin from "./features/auth/components/ProtectedAdmin";
@@ -121,12 +125,21 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/orders",
-    element: <UserOrderPage></UserOrderPage>,
+    path: "/my-orders",
+
+    element: (
+      <Protected>
+        <UserOrderPage></UserOrderPage>,
+      </Protected>
+    ),
   },
   {
     path: "/profile",
-    element: <UserProfilePage></UserProfilePage>,
+    element: (
+      <Protected>
+        <UserProfilePage></UserProfilePage>,
+      </Protected>
+    ),
   },
   {
     path: "/logout",
@@ -146,7 +159,7 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
- const userChecked=useSelector(selectUserChecked)
+  const userChecked = useSelector(selectUserChecked);
   useEffect(() => {
     dispatch(checkAuthAsync());
   }, []);
@@ -156,15 +169,12 @@ function App() {
       dispatch(fetchLoggedInUserAsync());
       dispatch(fetchItemsByUserIdAsync());
       // we can get user id from req.user
-   
     }
   }, [dispatch, user]);
 
   return (
     <div className="App">
-      { userChecked &&
-      <RouterProvider router={router} />
-    }
+      {userChecked && <RouterProvider router={router} />}
     </div>
   );
 }
