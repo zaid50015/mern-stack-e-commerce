@@ -121,7 +121,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/order-success/:id",
-    element: <OrderSucessPage></OrderSucessPage>,
+    element:<Protected><OrderSucessPage></OrderSucessPage>{' '}</Protected> ,
   },
 
   {
@@ -129,7 +129,7 @@ const router = createBrowserRouter([
 
     element: (
       <Protected>
-        <UserOrderPage></UserOrderPage>,
+        <UserOrderPage></UserOrderPage>{' '},
       </Protected>
     ),
   },
@@ -137,7 +137,7 @@ const router = createBrowserRouter([
     path: "/profile",
     element: (
       <Protected>
-        <UserProfilePage></UserProfilePage>,
+        <UserProfilePage></UserProfilePage>{' '},
       </Protected>
     ),
   },
