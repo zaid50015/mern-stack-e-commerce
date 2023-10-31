@@ -21,8 +21,6 @@ export const fetchProductsByFiltersAsync = createAsyncThunk(
   "product/fetchProductsByFilters",
   async ({ filter, sort, pagination,admin }) => {
     const response = await fetchProductsByFilters(filter, sort, pagination,admin);
-    // The value we return becomes the `fulfilled` action payload
-    //TODO: The backend wll automaticaly filter the delted products
     return response.data;
   }
 );

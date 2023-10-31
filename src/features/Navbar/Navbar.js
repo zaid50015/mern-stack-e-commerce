@@ -27,10 +27,9 @@ function classNames(...classes) {
 
 const Navbar = ({ children }) => {
   const items = useSelector(selectItem);
-  console.log(items)
+
   const userInfo = useSelector(selectLoggedInUserInfo);
-  console.log(userInfo);
-  console.log("hello3");
+ 
   return (
     <>
       {userInfo && <div className="min-h-full">

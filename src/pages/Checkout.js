@@ -65,9 +65,9 @@ function Checkout() {
         user:user.id,
         paymentMethod,
         selectedAddress,
-            // This can only be updated by admin
+           
       };
-          //TODO : We will upadte the cart after the payment is sucessfull
+         
       dispatch(createOrderAsync(order));
     } else {
        if(!selectedAddress){
@@ -106,12 +106,10 @@ function Checkout() {
           theme: "light",
           });
        }
-      //TODO adding proper alert
+    
     }
 
-    //TODO : Redirect to order-success page
-    //TODO : clear cart after order
-    //TODO : on server change the stock number of items
+    
   };
   //
 

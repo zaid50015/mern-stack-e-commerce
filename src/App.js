@@ -30,6 +30,7 @@ import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import ProductFormPageAdmin from "./pages/ProductFormPageAdmin";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import StripeCheckout from "./pages/StripeCheckout";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -148,6 +149,10 @@ const router = createBrowserRouter([
   {
     path: "/forgot-password",
     element: <ForgotPasswordPage></ForgotPasswordPage>,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage></ResetPasswordPage>,
   },
   {
     //koi rooute match nhi kara to ye chalega

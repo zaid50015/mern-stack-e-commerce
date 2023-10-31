@@ -14,12 +14,7 @@ import { TailSpin } from "react-loader-spinner";
 
 
 
-const highlights = [
-  "Hand cut and sewn locally",
-  "Dyed with our proprietary colors",
-  "Pre-washed & pre-shrunk",
-  "Ultra-soft 100% cotton",
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -47,7 +42,7 @@ const status=useSelector(selectProductListStatus)
     
       };
       dispatch(addToCartAsync(newItem));
-      //TODO it will be based on the server respons of backend
+    
       toast.success("Added to Cart", {
         position: "bottom-center",
         autoClose: 5000,
@@ -230,7 +225,7 @@ const status=useSelector(selectProductListStatus)
                   </div>
                 </div>
 
-                <div className="mt-10">
+                {product.highlights && <div className="mt-10">
                   <h3 className="text-sm font-medium text-gray-900">
                     Highlights
                   </h3>
@@ -240,14 +235,14 @@ const status=useSelector(selectProductListStatus)
                       role="list"
                       className="list-disc space-y-2 pl-4 text-sm"
                     >
-                      {highlights.map((highlight) => (
-                        <li key={highlight} className="text-gray-400">
+                      {product.highlights.map((highlight,index) => (
+                        <li key={index} className="text-gray-400">
                           <span className="text-gray-600">{highlight}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-                </div>
+                </div>}
 
                 <div className="mt-10">
                   <h2 className="text-sm font-medium text-gray-900">Details</h2>

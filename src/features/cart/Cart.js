@@ -11,7 +11,7 @@ import {
 } from "./cartSlice";
 import { discountedPrice } from "../../app/constants";
 import { TailSpin } from "react-loader-spinner";
-// TODO abhu bhi same id se nhi add ho rahe hai
+
 
 export default function Cart() {
   const dispatch = useDispatch();

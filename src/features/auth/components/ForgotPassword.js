@@ -1,15 +1,36 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {
+  resetPasswordRequestAsync,
+  selectError,
+  selectMailSent,
+  selectStatus,
+} from "../authSlice";
 
 const ForgotPassword = () => {
+  const dispatch = useDispatch();
+  const emailSent = useSelector(selectMailSent);
+  const err = useSelector(selectError);
+  const status = useSelector(selectStatus);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  console.log(errors);
+  const handleSendEmail = async (data) => {
+    toast.info('Sending Email...'); // Show "Sending Email" toast
+    try {
+      await dispatch(resetPasswordRequestAsync(data.email));
+      toast.success('Email Sent Successfully'); // Show "Email Sent Successfully" toast
+    } catch (error) {
+      toast.error('An Unexpected error occurred'); // Show error toast
+    }
+  };
 
   return (
     <>
@@ -28,10 +49,7 @@ const ForgotPassword = () => {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form
             noValidate
-            onSubmit={handleSubmit((data) => {
-              console.log(data);
-              // TODO : implementation on backend with email
-            })}
+            onSubmit={handleSubmit(handleSendEmail)}
             className="space-y-6"
           >
             <div>
@@ -45,10 +63,10 @@ const ForgotPassword = () => {
                 <input
                   id="email"
                   {...register("email", {
-                    required: "email is required",
+                    required: "Email is required",
                     pattern: {
                       value: /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi,
-                      message: "email not valid",
+                      message: "Email not valid",
                     },
                   })}
                   type="email"
@@ -56,6 +74,13 @@ const ForgotPassword = () => {
                 />
                 {errors.email && (
                   <p className="text-red-500">{errors.email.message}</p>
+                )}
+                {status === 'loading' ? (
+                  <p className="text-grey-500">Sending Email ...</p>
+                ) : ""}
+                {err && <p className="text-red-500">An Unexpected error occurred</p>}
+                {emailSent && (
+                  <p className="text-green-500">Email Sent Successfully</p>
                 )}
               </div>
             </div>
@@ -81,6 +106,7 @@ const ForgotPassword = () => {
           </p>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

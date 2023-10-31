@@ -25,11 +25,7 @@ import {
 import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
 import Pagination from "../../common/Pagination";
 
-const sortOptions = [
-  { name: "Best Rating", sort: "rating", order: "desc", current: false },
-  { name: "Price: Low to High", sort: "price", order: "asc", current: false },
-  { name: "Price: High to Low", sort: "price", order: "desc", current: false },
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -41,6 +37,11 @@ export default function AdminProductList() {
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const totalItems = useSelector(selectTotalItems);
+  const sortOptions = [
+    { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
+    { name: 'Price: Low to High', sort: 'discountPrice', order: 'asc', current: false },
+    { name: 'Price: High to Low', sort: 'discountPrice', order: 'desc', current: false },
+  ];
   const filters = [
     {
       id: "category",
@@ -61,11 +62,7 @@ export default function AdminProductList() {
   const handleFilter = (e, section, option) => {
 
     const newFilter = { ...filter };
-    // TODO : on server it will support multiple categories
-    // newFilter={
-    //   category:[]
-    //   filter;[]
-    // }
+ 
     if (e.target.checked) {
       if (newFilter[section.id]) {
         newFilter[section.id].push(option.value);
